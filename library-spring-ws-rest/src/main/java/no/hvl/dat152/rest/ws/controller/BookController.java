@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import no.hvl.dat152.rest.ws.exceptions.AuthorNotFoundException;
 import no.hvl.dat152.rest.ws.exceptions.BookNotFoundException;
 import no.hvl.dat152.rest.ws.exceptions.UpdateBookFailedException;
 import no.hvl.dat152.rest.ws.model.Author;
@@ -69,9 +70,29 @@ public class BookController {
 	}
 	
 	// TODO - getAuthorsOfBookByISBN (@Mappings, URI, and method)
+	@GetMapping("/books/{isbn}/authors")
+	public ResponseEntity<Set<Author>> getAuthorsOfBookByISBN(@PathVariable String isbn) throws BookNotFoundException {
+
+		Set<Author> authors = bookService.findAuthorsOfBookByISBN(isbn);
+		return new ResponseEntity<>(authors, HttpStatus.OK);
+	}
 	
-	// TODO - updateBookByISBN (@Mappings, URI, and method)
-	
-	// TODO - deleteBookByISBN (@Mappings, URI, and method)
+	//TODO - updateBookByISBN (@Mappings, URI, and method)
+	@PutMapping("/books/update/{isbn}")
+	public ResponseEntity<Book> updateBook(@PathVariable String isbn, @RequestBody Book book) throws BookNotFoundException, AuthorNotFoundException {
+
+		Book updatedBook = bookService.updateBook(book, isbn);
+
+		return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+	}
+
+	// TODO - deleteBookByISBN (@Mappings, URI, and method)  
+	@DeleteMapping("/books/delete/{isbn}")
+	public ResponseEntity<Object> deleteBook(@PathVariable String isbn) throws BookNotFoundException {
+
+		bookService.deleteByISBN(isbn);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
 
 }

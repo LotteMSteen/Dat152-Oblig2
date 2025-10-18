@@ -67,12 +67,12 @@ class ConfigCommandLineRunner implements CommandLineRunner  {
 	
 	private Iterable<Book> creatDefaultBooks() throws AuthorNotFoundException {
 		
-		Author author1 = authorService.findById(1L);
-		Author author2 = authorService.findById(2L);
-		Author author3 = authorService.findById(3L);
-		Author author4 = authorService.findById(4L);
-		Author author5 = authorService.findById(5L);
-		Author author6 = authorService.findById(6L);
+		Author author1 = authorService.findById(1);
+		Author author2 = authorService.findById(2);
+		Author author3 = authorService.findById(3);
+		Author author4 = authorService.findById(4);
+		Author author5 = authorService.findById(5);
+		Author author6 = authorService.findById(6);
 		
 		Set<Author> authors = new HashSet<Author>();
 		Book book1 = new Book();

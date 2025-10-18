@@ -84,7 +84,7 @@ class TestBook {
 		Response response = RestAssured.given()
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.body(updateOrder)
-				.put(API_ROOT+"/books/{isbn}", "abcde1234");
+				.put(API_ROOT+"/books/update/{isbn}", "abcde1234");
 	    
 	    assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 	    assertEquals("Software Engineering_2", response.jsonPath().get("title"));
@@ -97,7 +97,7 @@ class TestBook {
 		Book book = createRandomBook2();
 		bookService.saveBook(book);
 		
-	    Response response = RestAssured.delete(API_ROOT+"/books/hello_1245");
+	    Response response = RestAssured.delete(API_ROOT+"/books/delete/hello_1245");
 	    
 	    assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 	    

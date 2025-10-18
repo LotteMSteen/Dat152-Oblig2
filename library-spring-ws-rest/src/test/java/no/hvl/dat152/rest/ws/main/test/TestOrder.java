@@ -83,7 +83,7 @@ class TestOrder {
 	
 	@DisplayName("JUnit test for @DeleteMapping(/orders/{id}) endpoint")
 	@Test
-	public void deleteOrderById_thenOK() {
+	public void deleteOrderById_thenOK() { 
 
 	    Response response = RestAssured.delete(API_ROOT+"/orders/1");
 	    

@@ -134,7 +134,7 @@ class TestUser {
 	@Test
 	public void deleteUserById_thenOK() {
 
-	    Response response = RestAssured.delete(API_ROOT+"/users/1");
+	    Response response = RestAssured.delete(API_ROOT+"/users/delete/1");
 	    
 	    assertEquals(HttpStatus.OK.value(), response.getStatusCode());
 	    

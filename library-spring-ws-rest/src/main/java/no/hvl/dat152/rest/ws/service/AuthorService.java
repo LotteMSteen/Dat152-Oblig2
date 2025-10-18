@@ -24,7 +24,7 @@ public class AuthorService {
 	private AuthorRepository authorRepository;
 		
 	
-	public Author findById(long id) throws AuthorNotFoundException {
+	public Author findById(int id) throws AuthorNotFoundException {
 		
 		Author author = authorRepository.findById(id)
 				.orElseThrow(()-> new AuthorNotFoundException("Author with the id: "+id+ "not found!"));
@@ -32,17 +32,46 @@ public class AuthorService {
 		return author;
 	}
 	
-	// TODO public saveAuthor(Author author)
+	public Author saveAuthor(Author author) {
 		
-	
-	// TODO public Author updateAuthor(Author author, int id)
+		return authorRepository.save(author);
 		
-	
-	// TODO public List<Author> findAll()
-	
-	
-	// TODO public void deleteById(Long id) throws AuthorNotFoundException 
+	}
 
-	
-	// TODO public Set<Book> findBooksByAuthorId(Long id)
+
+	public Author updateAuthor(Author author, int id) throws AuthorNotFoundException {
+
+		Author existingAuthor = authorRepository.findById(id)
+				.orElseThrow(() -> new AuthorNotFoundException("Author with the id: "+id+ "not found!"));
+
+		existingAuthor.setFirstname(author.getFirstname());
+		existingAuthor.setLastname(author.getLastname());
+		existingAuthor.setBooks(author.getBooks());
+
+		return authorRepository.save(existingAuthor);
+	}
+
+	public List<Author> findAll() {
+		return (List<Author>) authorRepository.findAll();
+		
+	}
+
+
+	public void deleteById(int id) throws AuthorNotFoundException {
+		
+		Author author = authorRepository.findById(id)
+				.orElseThrow(() -> new AuthorNotFoundException("Author with the id: "+id+ "not found!"));
+
+		authorRepository.delete(author);
+	}
+
+	 public Set<Book> findBooksByAuthorId(int  id) throws AuthorNotFoundException{
+
+		Author author = authorRepository.findById(id)
+				.orElseThrow(() -> new AuthorNotFoundException("Author with the id: "+id+ "not found!"));
+
+		return author.getBooks();
+	}
 }
+
+
