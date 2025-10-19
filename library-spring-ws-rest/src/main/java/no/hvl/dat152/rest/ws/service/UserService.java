@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package no.hvl.dat152.rest.ws.service;
 
@@ -111,15 +111,14 @@ public class UserService {
 		throw new OrderNotFoundException("Order with id: " + oid + " not found for user with id: " + userid);
 	}
 
-	public User createOrdersForUser(Long userid, Order order) throws UserNotFoundException {
+	public Order createOrderForUser(Long userid, Order order) throws UserNotFoundException {
 
-		User user = userRepository.findById(userid)
-				.orElseThrow(() -> new UserNotFoundException("User with id: " + userid + " not found"));
+	User user = userRepository.findById(userid)
+			.orElseThrow(() -> new UserNotFoundException("User with id: " + userid + " not found"));
 
-		Set<Order> orders = user.getOrders();
-		orders.add(order);
-		user.setOrders(orders);
+	user.addOrder(order);
 
-		return userRepository.save(user);
+	userRepository.save(user);
+	return order;
 	}
 }

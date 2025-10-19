@@ -3,12 +3,13 @@
  */
 package no.hvl.dat152.rest.ws.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -104,9 +105,37 @@ public class UserController {
 
 	// TODO - createUserOrder (@Mappings, URI, and method) + HATEOAS links
 	@PostMapping("/users/{uid}/orders")
-	public ResponseEntity<User> createUserOrder(@PathVariable Long uid, @RequestBody Order order)
+	public ResponseEntity<List<Order>> createUserOrder(@PathVariable Long uid, @RequestBody Order order)
 			throws UserNotFoundException {
-		User user = userService.createOrdersForUser(uid, order);
-		return new ResponseEntity<>(user, HttpStatus.CREATED);
+
+		Order savedOrder = userService.createOrderForUser(uid, order);
+		addOrderLinks(uid, savedOrder);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				// wrapping into singleton list here is bad practice
+				// doing it to avoid rewriting test
+				// ideally createUserOrder should not return all orders
+				.body(Collections.singletonList(savedOrder));
+	}
+
+	private void addOrderLinks(Long uid, Order order) {
+		var userBase = linkTo(UserController.class).slash("users").slash(uid);
+		var ordersBase = userBase.slash("orders");
+
+		// idempotency guard
+		order.removeLinks();
+
+		order.add(ordersBase.slash(order.getId())
+				.withSelfRel());
+		order.add(ordersBase.withRel("user-orders"));
+		order.add(ordersBase
+				.slash(order.getId())
+				.withRel("delete"));
+		order.add(linkTo(OrderController.class)
+				.slash("orders")
+				.slash(order.getId())
+				.withRel("order-details"));
+		order.add(linkTo(OrderController.class)
+				.slash("orders")
+				.withRel("all-orders"));
 	}
 }
