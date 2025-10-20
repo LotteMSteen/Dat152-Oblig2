@@ -23,6 +23,19 @@ help:
 	@echo "  clean-rest      - Clean build artifacts for the REST service"
 	@echo "  clean-security  - Clean build artifacts for the OAuth-secured service"
 
+# run-keycloak:
+# 	cd ../../
+#     docker run --name keycloak_unoptimized -p 8080:8080 \
+#               -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin \
+#               -v ./keycloak/imports:/opt/keycloak/data/import \
+#               quay.io/keycloak/keycloak:latest \
+#               start-dev --import-realm
+
+tokens:
+	curl -X POST http://localhost:8080/realms/DAT152/protocol/openid-connect/token --data 'grant_type=password&client_id=dat152oblig2&username=user1&password=user1'  
+	curl -X POST http://localhost:8080/realms/DAT152/protocol/openid-connect/token --data 'grant_type=password&client_id=dat152oblig2&username=user2&password=user2' 
+	curl -X POST http://localhost:8080/realms/DAT152/protocol/openid-connect/token --data 'grant_type=password&client_id=dat152oblig2&username=user3&password=user3' 
+
 run-rest:
 	$(MAKE) -C $(REST_DIR) run
 
