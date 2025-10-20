@@ -1,0 +1,25 @@
+# Maven build output
+target/
+*/target/
+
+# Maven build metadata
+*.class
+*.iml
+*.ipr
+*.iws
+.flattened-pom.xml
+
+# IDE artifacts
+.idea/
+.project
+.classpath
+.settings/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
