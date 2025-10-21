@@ -47,6 +47,7 @@ public class OrderController {
     // Task 2: GET /orders — filter by expiry and paginate; return a plain list
     // (matches tests)
     @GetMapping("/orders")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Order>> getAllBorrowOrders(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate expiry,
             @RequestParam(defaultValue = "0") int page,

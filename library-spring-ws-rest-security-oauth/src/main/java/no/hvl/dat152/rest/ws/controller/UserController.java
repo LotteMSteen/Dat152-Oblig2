@@ -53,8 +53,10 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/users/{id}")
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-	public ResponseEntity<Object> getUser(@PathVariable Long id) throws UserNotFoundException, OrderNotFoundException {
+	// this auth check is stupid and ridiculous
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
+	public ResponseEntity<Object> getUser(@PathVariable Long id)
+			throws UserNotFoundException, OrderNotFoundException {
 
 		User user = userService.findUser(id);
 
@@ -72,50 +74,62 @@ public class UserController {
 
 	// TODO - updateUser (@Mappings, URI, and method)
 	@PutMapping("/users/{id}")
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
 	public ResponseEntity<Object> updateUser(@PathVariable Long id, @RequestBody User user)
 			throws UserNotFoundException {
+
 		User updatedUser = userService.updateUser(user, id);
 		return new ResponseEntity<>(updatedUser, HttpStatus.OK);
 	}
 
 	// TODO - deleteUser (@Mappings, URI, and method)
 	@DeleteMapping("/users/{id}")
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-	public ResponseEntity<Object> deleteUser(@PathVariable Long id) throws UserNotFoundException {
+	// this auth check is stupid and ridiculous
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
+	public ResponseEntity<Object> deleteUser(@PathVariable Long id)
+			throws UserNotFoundException {
+
 		userService.deleteUser(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	// TODO - getUserOrders (@Mappings, URI=/users/{id}/orders, and method)
 	@GetMapping("/users/{id}/orders")
-	@PreAuthorize("#email must match or hasAuthority('ADMIN')")
-	public ResponseEntity<Set<Order>> getUserOrders(@PathVariable Long id) throws UserNotFoundException {
+	// this auth check is stupid and ridiculous
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
+	public ResponseEntity<Set<Order>> getUserOrders(@PathVariable Long id)
+			throws UserNotFoundException {
+
 		Set<Order> orders = userService.getUserOrders(id);
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
 
 	// TODO - getUserOrder (@Mappings, URI=/users/{uid}/orders/{oid}, and method)
 	@GetMapping("/users/{uid}/orders/{oid}")
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+	// this auth check is stupid and ridiculous
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #uid")
 	public ResponseEntity<Order> getUserOrder(@PathVariable Long uid, @PathVariable Long oid)
 			throws UserNotFoundException, OrderNotFoundException {
+
 		Order order = userService.getUserOrder(uid, oid);
 		return new ResponseEntity<>(order, HttpStatus.OK);
 	}
 
 	// TODO - deleteUserOrder (@Mappings, URI, and method)
 	@DeleteMapping("/users/{uid}/orders/{oid}")
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+	// this auth check is stupid and ridiculous
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #uid")
 	public ResponseEntity<Object> deleteUserOrder(@PathVariable Long uid, @PathVariable Long oid)
 			throws UserNotFoundException, OrderNotFoundException {
+
 		userService.deleteOrderForUser(uid, oid);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	// TODO - createUserOrder (@Mappings, URI, and method) + HATEOAS links
 	@PostMapping("/users/{uid}/orders")
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+	// this auth check is stupid and ridiculous
+	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #uid")
 	public ResponseEntity<List<Order>> createUserOrder(@PathVariable Long uid, @RequestBody Order order)
 			throws UserNotFoundException {
 

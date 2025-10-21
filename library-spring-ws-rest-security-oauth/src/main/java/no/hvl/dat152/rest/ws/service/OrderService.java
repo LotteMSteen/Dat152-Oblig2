@@ -21,21 +21,23 @@ import no.hvl.dat152.rest.ws.repository.OrderRepository;
 @Service
 public class OrderService {
 
-	@Autowired
-	private OrderRepository orderRepository;
-	
-	  public Order saveOrder(Order order) {
+    @Autowired
+    private OrderRepository orderRepository;
+
+    public Order saveOrder(Order order) {
         return orderRepository.save(order);
     }
 
     public Order findOrder(Long id) throws OrderNotFoundException {
         return orderRepository.findById(id)
-            .orElseThrow(() -> new OrderNotFoundException("Order with id: " + id + " not found in the order list!"));
+                .orElseThrow(
+                        () -> new OrderNotFoundException("Order with id: " + id + " not found in the order list!"));
     }
 
     public void deleteOrder(Long id) throws OrderNotFoundException {
         Order order = orderRepository.findById(id)
-            .orElseThrow(() -> new OrderNotFoundException("Order with id: " + id + " not found in the order list!"));
+                .orElseThrow(
+                        () -> new OrderNotFoundException("Order with id: " + id + " not found in the order list!"));
         orderRepository.delete(order);
     }
 
@@ -58,13 +60,12 @@ public class OrderService {
 
     public Order updateOrder(Order order, Long id) throws OrderNotFoundException {
         return orderRepository.findById(id)
-            .map(existingOrder -> {
-                existingOrder.setExpiry(order.getExpiry());
-                existingOrder.setId(order.getId());
-                existingOrder.setIsbn(order.getIsbn());
-                return orderRepository.save(existingOrder);
-            })
-            .orElseThrow(() -> new OrderNotFoundException("Order with id: " + id + " not found in the order list!"));
+                .map(existingOrder -> {
+                    existingOrder.setExpiry(order.getExpiry());
+                    return orderRepository.save(existingOrder);
+                })
+                .orElseThrow(
+                        () -> new OrderNotFoundException("Order with id: " + id + " not found in the order list!"));
     }
 
 }
