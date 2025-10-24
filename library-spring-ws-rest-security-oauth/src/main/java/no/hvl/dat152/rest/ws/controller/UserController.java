@@ -53,7 +53,6 @@ public class UserController {
 	}
 
 	@GetMapping(value = "/users/{id}")
-	// this auth check is stupid and ridiculous
 	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
 	public ResponseEntity<Object> getUser(@PathVariable Long id)
 			throws UserNotFoundException, OrderNotFoundException {
@@ -84,7 +83,6 @@ public class UserController {
 
 	// TODO - deleteUser (@Mappings, URI, and method)
 	@DeleteMapping("/users/{id}")
-	// this auth check is stupid and ridiculous
 	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
 	public ResponseEntity<Object> deleteUser(@PathVariable Long id)
 			throws UserNotFoundException {
@@ -95,7 +93,6 @@ public class UserController {
 
 	// TODO - getUserOrders (@Mappings, URI=/users/{id}/orders, and method)
 	@GetMapping("/users/{id}/orders")
-	// this auth check is stupid and ridiculous
 	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #id")
 	public ResponseEntity<Set<Order>> getUserOrders(@PathVariable Long id)
 			throws UserNotFoundException {
@@ -106,7 +103,6 @@ public class UserController {
 
 	// TODO - getUserOrder (@Mappings, URI=/users/{uid}/orders/{oid}, and method)
 	@GetMapping("/users/{uid}/orders/{oid}")
-	// this auth check is stupid and ridiculous
 	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #uid")
 	public ResponseEntity<Order> getUserOrder(@PathVariable Long uid, @PathVariable Long oid)
 			throws UserNotFoundException, OrderNotFoundException {
@@ -117,7 +113,6 @@ public class UserController {
 
 	// TODO - deleteUserOrder (@Mappings, URI, and method)
 	@DeleteMapping("/users/{uid}/orders/{oid}")
-	// this auth check is stupid and ridiculous
 	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #uid")
 	public ResponseEntity<Object> deleteUserOrder(@PathVariable Long uid, @PathVariable Long oid)
 			throws UserNotFoundException, OrderNotFoundException {
@@ -128,7 +123,6 @@ public class UserController {
 
 	// TODO - createUserOrder (@Mappings, URI, and method) + HATEOAS links
 	@PostMapping("/users/{uid}/orders")
-	// this auth check is stupid and ridiculous
 	@PreAuthorize("hasAuthority('ADMIN') or principal.claims['preferred_username'] == 'user' + #uid")
 	public ResponseEntity<List<Order>> createUserOrder(@PathVariable Long uid, @RequestBody Order order)
 			throws UserNotFoundException {
