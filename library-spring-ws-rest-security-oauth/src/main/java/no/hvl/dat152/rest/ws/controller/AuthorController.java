@@ -22,7 +22,6 @@ import no.hvl.dat152.rest.ws.exceptions.AuthorNotFoundException;
 import no.hvl.dat152.rest.ws.model.Author;
 import no.hvl.dat152.rest.ws.model.Book;
 import no.hvl.dat152.rest.ws.service.AuthorService;
-import no.hvl.dat152.rest.ws.service.BookService;
 
 /**
  * 

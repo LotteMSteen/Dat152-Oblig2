@@ -7,7 +7,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import no.hvl.dat152.rest.ws.exceptions.OrderNotFoundException;
-import no.hvl.dat152.rest.ws.exceptions.UserNotFoundException;
 import no.hvl.dat152.rest.ws.model.Order;
 import no.hvl.dat152.rest.ws.service.OrderService;
 
@@ -43,7 +40,6 @@ public class OrderController {
 	@Autowired
 	private OrderService orderService;
 
-	 // Task 2: GET /orders — filter by expiry and paginate; return a plain list (matches tests)
     @GetMapping("/orders")
     public ResponseEntity<List<Order>> getAllBorrowOrders(
             @RequestParam(required = false)
@@ -54,13 +50,13 @@ public class OrderController {
         Pageable pageable = PageRequest.of(page, size);
 
         List<Order> orders = (expiry == null)
-                ? orderService.findAllOrders(pageable)     // paged list
+                ? orderService.findAllOrders(pageable) 
                 : orderService.findByExpiryDate(expiry, pageable);
 
         return ResponseEntity.ok(orders);
     }
 
-    // GET /orders/{id} — return HATEOAS-wrapped single order (tests still read fields at root; also checks _links)
+    // GET /orders/{id} — return HATEOAS-wrapped single order
     @GetMapping("/orders/{id}")
     public ResponseEntity<EntityModel<Order>> getBorrowOrder(@PathVariable Long id) throws OrderNotFoundException {
         Order order = orderService.findOrder(id);
@@ -82,7 +78,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // POST /orders — create + HATEOAS links to other actions (as required by Task 2)
+    // POST /orders — create + HATEOAS links to other actions 
     @PostMapping("/orders")
     public ResponseEntity<EntityModel<Order>> createUserOrder(@RequestBody Order order) throws OrderNotFoundException {
         Order saved = orderService.saveOrder(order);
@@ -97,7 +93,6 @@ public class OrderController {
             .body(model);
     }
 
-    // HATEOAS helper for single Order
     private EntityModel<Order> toOrderModel(Order order) throws OrderNotFoundException {
         return EntityModel.of(order,
             linkTo(methodOn(OrderController.class).getBorrowOrder(order.getId())).withSelfRel(),

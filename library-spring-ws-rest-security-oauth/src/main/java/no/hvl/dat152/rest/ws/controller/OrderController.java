@@ -44,8 +44,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    // Task 2: GET /orders — filter by expiry and paginate; return a plain list
-    // (matches tests)
+    // Task 2: GET /orders — filter by expiry and paginate
     @GetMapping("/orders")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Order>> getAllBorrowOrders(
@@ -62,8 +61,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    // GET /orders/{id} — return HATEOAS-wrapped single order (tests still read
-    // fields at root; also checks _links)
+    // GET /orders/{id} — return HATEOAS-wrapped single order
     @GetMapping("/orders/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<EntityModel<Order>> getBorrowOrder(@PathVariable Long id) throws OrderNotFoundException {
@@ -88,8 +86,7 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // POST /orders — create + HATEOAS links to other actions (as required by Task
-    // 2)
+    // POST /orders — create + HATEOAS links to other actions
     @PostMapping("/orders")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<EntityModel<Order>> createUserOrder(@RequestBody Order order) throws OrderNotFoundException {
@@ -105,7 +102,7 @@ public class OrderController {
                 .body(model);
     }
 
-    // HATEOAS helper for single Order
+    // HATEOAS helper 
     private EntityModel<Order> toOrderModel(Order order) throws OrderNotFoundException {
         return EntityModel.of(order,
                 linkTo(methodOn(OrderController.class).getBorrowOrder(order.getId())).withSelfRel(),

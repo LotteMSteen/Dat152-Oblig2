@@ -41,12 +41,10 @@ public class OrderService {
         orderRepository.delete(order);
     }
 
-    /** Non-paged list (kept if used elsewhere) */
     public List<Order> findAllOrders() {
         return (List<Order>) orderRepository.findAll();
     }
 
-    /** NEW: paged list used by the controller */
     public List<Order> findAllOrders(Pageable pageable) {
         Page<Order> page = orderRepository.findAll(pageable);
         return page.getContent();
